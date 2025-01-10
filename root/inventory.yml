@@ -1,0 +1,22 @@
+all:
+  vars:
+    ansible_ssh_users: root
+    ansible_ssh_port: 22
+    ansible_python_interpreter: /usr/bin/python3
+  children:
+    test:
+      hosts:
+        debiant-test:
+          ansible_host: 172.19.0.6
+    dev:
+      hosts:
+        dev1:
+          ansible_ssh_hosts: 172.19.0.4
+        dev2:
+          ansible_ssh_hosts: 172.19.0.7
+    prod:
+      hosts:
+        prod1:
+          ansible_ssh_hosts: 172.19.0.5
+        prod2:
+          ansible_ssh_hosts: 172.19.0.3
