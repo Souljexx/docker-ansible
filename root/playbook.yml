@@ -1,0 +1,38 @@
+- name: playbook prod
+  hosts: prod
+  vars:
+    timeout: 400
+    titre: HeH - Departement technique
+  tasks:
+  - name: installer le paquet PHP
+    apt:
+      name: php
+      state: latest
+      update_cache: yes
+    when: ansible_os_family == "Debian"
+  - name: installer le paquet apache
+    apt:
+      name: apache2
+      state: latest
+      update_cache: yes
+  - name: démarrer le service apache2
+    service:
+      name: apache2
+      state: started
+      enabled: yes
+  - name: Deployer le fichier de config
+    template:
+      src: template/apache2.j2
+      dest: /etc/apache/apache2.conf
+    notify: 
+      - Restart apache
+  - name: Copier le fichier index
+    template:
+      src: template/index.j2
+      dest: /var/www/index.html
+  handlers:
+    - name: Restart apache
+      service:
+        name: apache2
+        state: restarted
+
